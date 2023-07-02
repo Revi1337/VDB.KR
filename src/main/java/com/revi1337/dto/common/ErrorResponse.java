@@ -1,13 +1,21 @@
 package com.revi1337.dto.common;
 
-public record ErrorResponse <T> (
+import java.util.HashMap;
+import java.util.Map;
+
+public record ErrorResponse (
         int statusCode,
-        String reason,
-        T validation
+        String message,
+        Map<String, String> validation
 ) {
 
-    public static <T> ErrorResponse <T> of(int statusCode, String reason, T body) {
-        return new ErrorResponse<>(statusCode, reason, body);
+    public static  ErrorResponse of(int statusCode, String message, Map<String, String> validation) {
+        return new ErrorResponse(statusCode, message, validation);
+    }
+
+    public static  ErrorResponse of(int statusCode, String message) {
+        return new ErrorResponse(statusCode, message, new HashMap<>());
     }
 
 }
+
