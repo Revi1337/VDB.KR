@@ -7,20 +7,14 @@ import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.lang.reflect.ParameterizedType;
 import java.net.URI;
-import java.net.http.HttpClient;
+import java.text.DecimalFormat;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest @AutoConfigureMockMvc
 class NVCControllerTest {
@@ -63,18 +57,14 @@ class NVCControllerTest {
         String bodyString = responseEntity.getBody();
         System.out.println("bodyString = " + bodyString);
     }
-    //        URI uri = UriComponentsBuilder.fromUriString("https://www.google.com")
-//                .path("search")
-//                .query("q={query}")
-//                .buildAndExpand("site%3Agithub.com+" + cveSearchType.cve_id())
-//                .toUri();
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.add(HttpHeaders.USER_AGENT, "VDB.KR");
-//        RequestEntity<?> requestEntity = new RequestEntity<>(httpHeaders, HttpMethod.GET, uri);
-//        ResponseEntity<String> responseEntity = restTemplate.exchange(requestEntity, String.class);
-//        String body = responseEntity.getBody();
-//        System.out.println("body = " + body);
 
-
+    @Test
+    public void decimalFormatTest() {
+        DecimalFormat decimalFormat = new DecimalFormat("00");
+        for (int number = 0; number <= 12; number++) {
+            String format = decimalFormat.format(number);
+            System.out.println("format = " + format);
+        }
+    }
 
 }
