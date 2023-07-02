@@ -1,0 +1,24 @@
+package com.revi1337.service;
+
+import com.revi1337.domain.UserAccount;
+import com.revi1337.dto.UserAccountDto;
+import com.revi1337.exception.DuplicateEmailException;
+import com.revi1337.repository.UserAccountRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service @RequiredArgsConstructor @Transactional(readOnly = true)
+public class UserAccountService {
+
+    private final UserAccountRepository userAccountRepository;
+
+    @Transactional
+    public void joinUser(UserAccountDto userAccountDto) {
+        UserAccount userAccount = userAccountDto.toEntity();
+        String email = userAccount.getEmail();
+        if (userAccountRepository.findByEmail(email).isPresent())
+            throw new DuplicateEmailException();
+        userAccountRepository.save(userAccount);
+    }
+}
