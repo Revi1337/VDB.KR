@@ -5,8 +5,11 @@ import com.revi1337.dto.UserAccountDto;
 import com.revi1337.exception.DuplicateEmailException;
 import com.revi1337.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service @RequiredArgsConstructor @Transactional(readOnly = true)
 public class UserAccountService {
@@ -21,4 +24,10 @@ public class UserAccountService {
             throw new DuplicateEmailException();
         userAccountRepository.save(userAccount);
     }
+
+    public Page<UserAccountDto> findAllUsers(Pageable pageable) {
+        return userAccountRepository.findAll(pageable)
+                .map(UserAccountDto::from);
+    }
+
 }

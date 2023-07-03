@@ -24,4 +24,13 @@ public record UserAccountDto(
                 .build();
     }
 
+    public static UserAccountDto from(UserAccount userAccount) {
+        return UserAccountDto.of(
+                userAccount.getId(),
+                userAccount.getEmail(),
+                userAccount.getUsername(),
+                userAccount.getPassword()
+        );
+    }
+
 }
