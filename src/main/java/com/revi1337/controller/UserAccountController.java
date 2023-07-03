@@ -1,5 +1,6 @@
 package com.revi1337.controller;
 
+import com.revi1337.dto.UserAccountDto;
 import com.revi1337.dto.common.APIResponse;
 import com.revi1337.dto.request.JoinRequest;
 import com.revi1337.dto.response.UserAccountResponse;
@@ -33,6 +34,15 @@ public class UserAccountController {
                 .map(UserAccountResponse::from)
                 .toList();
         APIResponse<List<UserAccountResponse>> apiResponse = APIResponse.of(userAccountResponses);
+        return ResponseEntity
+                .status(OK)
+                .body(apiResponse);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> findUserById(@PathVariable Long userId) {
+        UserAccountDto userAccountDto = userAccountService.findUserById(userId);
+        APIResponse<UserAccountDto> apiResponse = APIResponse.of(userAccountDto);
         return ResponseEntity
                 .status(OK)
                 .body(apiResponse);

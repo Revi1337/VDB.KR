@@ -3,6 +3,7 @@ package com.revi1337.service;
 import com.revi1337.domain.UserAccount;
 import com.revi1337.dto.UserAccountDto;
 import com.revi1337.exception.DuplicateEmailException;
+import com.revi1337.exception.UserNotFoundException;
 import com.revi1337.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,13 @@ public class UserAccountService {
     public Page<UserAccountDto> findAllUsers(Pageable pageable) {
         return userAccountRepository.findAll(pageable)
                 .map(UserAccountDto::from);
+    }
+
+    public UserAccountDto findUserById(Long userId) {
+        return userAccountRepository
+                .findById(userId)
+                .map(UserAccountDto::from)
+                .orElseThrow(UserNotFoundException::new);
     }
 
 }
