@@ -133,4 +133,33 @@ class UserAccountControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName(value = "[Controller : 특정 ID 를 갖는 UserAccount 조회하면 200 과 json 을 내려준다.]")
+    public void findUserByIdTest() throws Exception {
+        UserAccount userAccount = UserAccount.create()
+                .email("revi1337@naver.com")
+                .username("revi1337")
+                .password("1337")
+                .build();
+        UserAccount savedUserAccount = userAccountRepository.save(userAccount);
+        Long id = savedUserAccount.getId();
+
+        mockMvc.perform(get("/api/v1/user/{userId}", id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.payload.email").value("revi1337@naver.com"))
+                .andExpect(jsonPath("$.payload.username").value("revi1337"))
+                .andExpect(jsonPath("$.payload.password").value("1337"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "[Controller : 존재하지않는 ID 를  갖는 UserAccount 조회하면 400 과 Err Json 이 내려온다.]")
+    public void returnErrJsonWhenRequestNonExistingUserAccountId() throws Exception {
+        mockMvc.perform(get("/api/v1/user/{userId}", 100L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error.statusCode").value(404))
+                .andExpect(jsonPath("$.error.message").value("user not found"))
+                .andDo(print());
+    }
+
 }
