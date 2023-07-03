@@ -116,4 +116,21 @@ class UserAccountControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName(value = "[Controller : 전체 회원 조회]")
+    public void findAllUserTest() throws Exception {
+        UserAccount userAccount = UserAccount.create()
+                .email("revi1337@naver.com")
+                .username("revi1337")
+                .password("1337")
+                .build();
+        userAccountRepository.save(userAccount);
+
+        mockMvc.perform(get("/api/v1/users"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.payload").isArray())
+                .andExpect(jsonPath("$.payload.size()").value(1))
+                .andDo(print());
+    }
+
 }

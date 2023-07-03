@@ -9,12 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.*;
 
 @DisplayName(value = "[Serivce : Service Slice Test]")
 @ExtendWith(MockitoExtension.class)
@@ -41,4 +43,21 @@ class UserAccountServiceTest {
         UserAccount findUserAccount = userAccountRepository.findById(1L).get();
         assertThat(userAccount.getId()).isEqualTo(findUserAccount.getId());
     }
+
+    @Test
+    @DisplayName(value = "[SERVICE : 전체 회원조회 테스트]")
+    public void findAllUserTest() {
+        // given
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        given(userAccountRepository.findAll(pageRequest)).willReturn(Page.empty());
+
+        // when
+        Page<UserAccountDto> userAccountDtos = userAccountService.findAllUsers(pageRequest);
+
+        // then
+        assertThat(userAccountDtos).isEmpty();
+        then(userAccountRepository).should().findAll(pageRequest);
+    }
+
+
 }
