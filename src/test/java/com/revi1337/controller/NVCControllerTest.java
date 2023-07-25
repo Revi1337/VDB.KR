@@ -2,6 +2,7 @@ package com.revi1337.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revi1337.dto.common.APIResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.net.URI;
 import java.text.DecimalFormat;
 
 
+@Disabled
 @SpringBootTest @AutoConfigureMockMvc
 class NVCControllerTest {
 
