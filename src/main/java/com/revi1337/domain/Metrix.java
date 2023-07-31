@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.Objects;
 
+@ToString
 @Builder(builderMethodName = "create") @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
