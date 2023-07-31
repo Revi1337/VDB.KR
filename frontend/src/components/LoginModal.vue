@@ -5,7 +5,7 @@
       class="login-container row items-center justify-center q-px-sm q-pt-md"
     >
       <q-card-section>
-        <LogoComponent />
+        <HeaderLogo />
       </q-card-section>
 
       <q-form @submit.prevent="userLoginRequest">
@@ -25,7 +25,7 @@
             type="password"
           />
           <div class="text-right q-my-md">
-            <ButtonComponent outline type="submit" label="Sign In" />
+            <Button outline type="submit" label="Sign In" />
           </div>
 
           <q-separator inset />
@@ -74,8 +74,8 @@
 </template>
 
 <script setup>
-import ButtonComponent from 'src/components/ButtonComponent.vue';
-import LogoComponent from './LogoComponent.vue';
+import Button from 'src/components/Button.vue';
+import HeaderLogo from './HeaderLogo.vue';
 import { ref } from 'vue';
 import { userLogin } from 'src/api/auth';
 

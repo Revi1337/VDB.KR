@@ -1,46 +1,44 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <HeaderComponent>
+    <PageHeader>
       <template #header-content>
-        <DropDownComponent class="q-ml-lg" label="Products">
-          <DropDownItemComponent
-            :contents="[{ label: 'LABEL1', clickable: true }]"
-          />
-        </DropDownComponent>
+        <DropDown class="q-ml-lg" label="Products">
+          <DropDownItem :contents="[{ label: 'LABEL1', clickable: true }]" />
+        </DropDown>
 
-        <DropDownComponent label="Resources">
-          <DropDownItemComponent
+        <DropDown label="Resources">
+          <DropDownItem
             :contents="[
               { label: 'LABEL1', clickable: true },
               { label: 'LABEL2', clickable: false }
             ]"
           />
-        </DropDownComponent>
+        </DropDown>
 
-        <ButtonComponent flat label="statistics" to="Statistic" />
-        <ButtonComponent flat label="statistics2" to="Statistic2" />
+        <Button flat label="statistics" to="Statistic" />
+        <Button flat label="statistics2" to="Statistic2" />
       </template>
 
       <template #header-left>
-        <ButtonComponent label="Log In" outline @click="layout = !layout" />
-        <ButtonComponent label="Sign Up" to="SignUp" />
-        <LoginModalComponent v-model="layout" />
+        <Button label="Log In" outline @click="layout = !layout" />
+        <Button label="Sign Up" to="SignUp" />
+        <LoginModal v-model="layout" />
       </template>
-    </HeaderComponent>
+    </PageHeader>
 
-    <ContentComponent />
-    <FooterComponent />
+    <PageContent />
+    <PageFooter />
   </q-layout>
 </template>
 
 <script setup>
-import HeaderComponent from 'src/components/HeaderComponent.vue';
-import ContentComponent from 'src/components/ContentComponent.vue';
-import FooterComponent from 'src/components/FooterComponent.vue';
-import DropDownComponent from 'src/components/DropDownComponent.vue';
-import DropDownItemComponent from 'src/components/DropDownItemComponent.vue';
-import ButtonComponent from 'src/components/ButtonComponent.vue';
-import LoginModalComponent from 'src/components/LoginModalComponent.vue';
+import PageHeader from 'src/components/PageHeader.vue';
+import PageContent from 'src/components/PageContent.vue';
+import PageFooter from 'src/components/PageFooter.vue';
+import DropDown from 'src/components/DropDown.vue';
+import DropDownItem from 'src/components/DropDownItem.vue';
+import Button from 'src/components/Button.vue';
+import LoginModal from 'src/components/LoginModal.vue';
 import { ref } from 'vue';
 
 const layout = ref(false);

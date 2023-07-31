@@ -3,7 +3,7 @@
     <q-card class="login-container row items-center justify-center q-pa-xl">
       <q-form @submit.prevent="userJoinRequest">
         <div class="login-input q-gutter-y-sm">
-          <InputFormComponent
+          <Input
             autofocus
             outlined
             label="Username"
@@ -18,7 +18,7 @@
             </template>
 
             <template #append>
-              <ButtonComponent
+              <Button
                 type="button"
                 label="verify"
                 flat
@@ -31,9 +31,9 @@
                 {{ error.$message }}
               </p>
             </template>
-          </InputFormComponent>
+          </Input>
 
-          <InputFormComponent
+          <Input
             outlined
             label="Email"
             :spellcheck="false"
@@ -47,7 +47,7 @@
             </template>
 
             <template #append>
-              <ButtonComponent
+              <Button
                 type="button"
                 label="verify"
                 flat
@@ -60,9 +60,9 @@
                 {{ error.$message }}
               </p>
             </template>
-          </InputFormComponent>
+          </Input>
 
-          <InputFormComponent
+          <Input
             :type="isPwd ? 'password' : 'text'"
             outlined
             label="Password"
@@ -89,9 +89,9 @@
                 {{ error.$message }}
               </p>
             </template>
-          </InputFormComponent>
+          </Input>
 
-          <InputFormComponent
+          <Input
             :type="isPwd ? 'password' : 'text'"
             outlined
             label="Password Confirm"
@@ -118,10 +118,10 @@
                 {{ error.$message }}
               </p>
             </template>
-          </InputFormComponent>
+          </Input>
 
           <div class="text-right">
-            <ButtonComponent type="submit" label="Sign Up" outline />
+            <Button type="submit" label="Sign Up" outline />
           </div>
         </div>
       </q-form>
@@ -134,8 +134,8 @@
 </template>
 
 <script setup>
-import ButtonComponent from 'components/ButtonComponent.vue';
-import InputFormComponent from 'components/InputFormComponent.vue';
+import Button from 'components/Button.vue';
+import Input from 'components/Input.vue';
 import { userJoin } from 'src/api/auth';
 import { ref, computed, watch } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
@@ -270,7 +270,7 @@ const userJoinRequest = async () => {
             </template>
 
             <template #append>
-              <ButtonComponent
+              <Button
                 type="button"
                 label="verify"
                 flat
@@ -299,7 +299,7 @@ const userJoinRequest = async () => {
             </template>
 
             <template #append>
-              <ButtonComponent
+              <Button
                 type="button"
                 label="verify"
                 flat
@@ -373,7 +373,7 @@ const userJoinRequest = async () => {
           </q-input>
 
           <div class="text-right">
-            <ButtonComponent type="submit" label="Sign Up" outline />
+            <Button type="submit" label="Sign Up" outline />
           </div>
         </div>
       </q-form>
@@ -386,7 +386,7 @@ const userJoinRequest = async () => {
 </template>
 
 <script setup>
-import ButtonComponent from 'components/ButtonComponent.vue';
+import Button from 'components/Button.vue';
 import { userJoin } from 'src/api/auth';
 import { ref, computed, watch } from 'vue';
 import { useVuelidate } from '@vuelidate/core';

@@ -5,7 +5,7 @@
         <div class="col-auto row items-center q-mr-xl">
           <div class="row items-center">
             <slot name="header-logo">
-              <LogoComponent @click="$router.push({ name: 'Index' })" />
+              <HeaderLogo @click="$router.push({ name: 'Index' })" />
             </slot>
           </div>
 
@@ -22,7 +22,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import LogoComponent from 'components/LogoComponent.vue';
+import HeaderLogo from 'components/HeaderLogo.vue';
 
 const headerStyle = ref([
   'height: 82px',

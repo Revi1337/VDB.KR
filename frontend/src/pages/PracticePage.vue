@@ -1,5 +1,5 @@
 <template>
-  <InputFormComponent
+  <Input
     label="PRACTICE"
     outlined
     autofocus
@@ -13,7 +13,7 @@
     </template>
 
     <template #append>
-      <ButtonComponent
+      <Button
         type="button"
         label="verify"
         flat
@@ -24,9 +24,9 @@
     <template #error>
       <div>THIS IS ERROR</div>
     </template>
-  </InputFormComponent>
+  </Input>
 
-  <!-- <InputFormComponent
+  <!-- <Input
     label="PRACTICE"
     outlined
     autofocus
@@ -36,7 +36,8 @@
 </template>
 
 <script setup>
-import InputFormComponent from 'src/components/InputFormComponent.vue';
+import Button from 'src/components/Button.vue';
+import Input from 'src/components/Input.vue';
 import { ref } from 'vue';
 
 const formValue = ref('');

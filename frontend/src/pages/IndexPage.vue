@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <CardComponent :style="aboutCard">
+    <AppCard :style="aboutCard">
       <div class="about q-mt-lg">
         <div class="text-center text-overline">WHAT IS SYNK</div>
         <div class="text-center q-mt-md q-mb-xl">
@@ -11,19 +11,16 @@
       <div>
         <div class="row items-center justify-center q-px-lg">
           <template v-for="(value, index) in 3" :key="index">
-            <CardComponent
-              :style="aboutMiddle"
-              class="q-mx-sm col flex flex-center"
-            >
+            <AppCard :style="aboutMiddle" class="q-mx-sm col flex flex-center">
               <div>asdasd</div>
               <div>asdasd</div>
-            </CardComponent>
+            </AppCard>
           </template>
         </div>
 
         <div class="q-mt-xl row items-center justify-center">
           <template v-for="(value, index) in 4" :key="index">
-            <CardComponent
+            <AppCard
               :style="aboutFooter"
               class="binding-event col q-mx-sm q-mx-md flex flex-center"
               @mouseenter="toggleMouseEvents"
@@ -35,16 +32,16 @@
                   <q-icon name="fa-solid fa-arrow-right" size="xs"></q-icon>
                 </div>
               </div>
-            </CardComponent>
+            </AppCard>
           </template>
         </div>
       </div>
-    </CardComponent>
+    </AppCard>
   </q-page>
 </template>
 
 <script setup>
-import CardComponent from 'src/components/CardComponent.vue';
+import AppCard from 'src/components/AppCard.vue';
 
 const toggleMouseEvents = event => event.target.classList.toggle('hover');
 

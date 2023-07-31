@@ -18,7 +18,7 @@
             type="password"
           />
           <div class="text-right q-my-md">
-            <ButtonComponent outline type="submit" label="Sign In" />
+            <Button outline type="submit" label="Sign In" />
           </div>
 
           <q-separator inset />
@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import ButtonComponent from 'components/ButtonComponent.vue';
+import Button from 'components/Button.vue';
 import { userLogin } from 'src/api/auth';
 import { ref } from 'vue';
 
