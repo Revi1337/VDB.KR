@@ -59,7 +59,7 @@ public class AuthenticationService {
                 .expiredAt(LocalDateTime.now().plusMinutes(15))
                 .build();
         emailTokenService.saveEmailToken(emailToken);
-        String activateLink = "http://localhost:8080/api/v1/auth/register/confirm?token=" + randomConfirmToken;
+        String activateLink = "http://localhost:8080/api/v1/auth/email/confirm?token=" + randomConfirmToken;
         emailSendService.send(userAccountDto.username(), userAccount.getEmail(), "Confirm your email", activateLink);
     }
 

@@ -20,7 +20,7 @@ public class AuthController {
         authenticationService.register(joinRequest.toDto(), httpServletRequest);
     }
 
-    @GetMapping("/register/email/confirm")
+    @GetMapping("/email/confirm")
     public String confirmToken(@RequestParam String token) {
         authenticationService.confirmToken(token);
         return "ok";
