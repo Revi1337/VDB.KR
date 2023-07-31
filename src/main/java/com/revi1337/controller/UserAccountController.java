@@ -2,14 +2,13 @@ package com.revi1337.controller;
 
 import com.revi1337.dto.UserAccountDto;
 import com.revi1337.dto.common.APIResponse;
-import com.revi1337.dto.request.JoinRequest;
 import com.revi1337.dto.response.UserAccountResponse;
 import com.revi1337.service.UserAccountService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,15 +21,10 @@ public class UserAccountController {
 
     private final UserAccountService userAccountService;
 
-    @PostMapping("/user/join")
-    public void joinUser(@RequestBody @Valid JoinRequest joinRequest) {
-        userAccountService.joinUser(joinRequest.toDto());
-    }
-
     @GetMapping("/users")
     public ResponseEntity<?> findAllUsers(@PageableDefault Pageable pageable) {
         List<UserAccountResponse> userAccountResponses = userAccountService
-                .findAllUsers(pageable)
+                .findAllUserAccount(pageable)
                 .map(UserAccountResponse::from)
                 .toList();
         APIResponse<List<UserAccountResponse>> apiResponse = APIResponse.of(userAccountResponses);
@@ -41,8 +35,9 @@ public class UserAccountController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> findUserById(@PathVariable Long userId) {
-        UserAccountDto userAccountDto = userAccountService.findUserById(userId);
-        APIResponse<UserAccountDto> apiResponse = APIResponse.of(userAccountDto);
+        UserAccountDto userAccountDto = userAccountService.findUserAccountById(userId);
+        UserAccountResponse userAccountResponse = UserAccountResponse.from(userAccountDto);
+        APIResponse<UserAccountResponse> apiResponse = APIResponse.of(userAccountResponse);
         return ResponseEntity
                 .status(OK)
                 .body(apiResponse);
