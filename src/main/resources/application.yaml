@@ -1,4 +1,18 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: "*"
+
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:tcp://localhost/~/vdb
@@ -17,6 +31,18 @@ spring:
       pageable:
         one-indexed-parameters: true
 
+application:
+  api:
+    nvd:
+      api-key: ${NVD_API_KEY}
+
+  security:
+    jwt:
+      secret-key: ${ACCESS_TOKEN_SECRET_KEY}
+      expiration: ${ACCESS_TOKEN_EXPIRATION}
+      refresh-token:
+        secret-key: ${REFRESH_TOKEN_SECRET_KEY}
+        expiration: ${REFRESH_TOKEN_EXPIRATION}
 
 logging:
   level:
