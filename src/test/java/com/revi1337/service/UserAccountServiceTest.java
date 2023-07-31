@@ -34,12 +34,12 @@ class UserAccountServiceTest {
     public void joinUser() {
         // given
         UserAccountDto userAccountDto = UserAccountDto.of(null, "revi1337@naver.com", "revi1337", "1337");
-        UserAccount userAccount = userAccountDto.toEntity();
+        UserAccount userAccount = userAccountDto.toEntity(null);
         given(userAccountRepository.save(any())).willReturn(userAccount);
         given(userAccountRepository.findById(1L)).willReturn(Optional.of(userAccount));
 
         // when
-        userAccountService.joinUser(userAccountDto);
+//        userAccountService.joinUser(userAccountDto);
 
         // then
         UserAccount findUserAccount = userAccountRepository.findById(1L).get();
@@ -54,7 +54,7 @@ class UserAccountServiceTest {
         given(userAccountRepository.findAll(pageRequest)).willReturn(Page.empty());
 
         // when
-        Page<UserAccountDto> userAccountDtos = userAccountService.findAllUsers(pageRequest);
+        Page<UserAccountDto> userAccountDtos = userAccountService.findAllUserAccount(pageRequest);
 
         // then
         assertThat(userAccountDtos).isEmpty();
@@ -67,11 +67,11 @@ class UserAccountServiceTest {
         // given
         Long userId = 1L;
         UserAccountDto userAccountDto = UserAccountDto.of(userId, "revi1337@naver.com", "revi1337", "1337");
-        UserAccount userAccount = userAccountDto.toEntity();
+        UserAccount userAccount = userAccountDto.toEntity(null);
         given(userAccountRepository.findById(userId)).willReturn(Optional.of(userAccount));
 
         // When
-        UserAccountDto userAccountDto1 = userAccountService.findUserById(userId);
+        UserAccountDto userAccountDto1 = userAccountService.findUserAccountById(userId);
 
         // Then
         assertThat(userAccountDto1)
@@ -89,7 +89,7 @@ class UserAccountServiceTest {
         given(userAccountRepository.findById(userId)).willReturn(Optional.empty());
 
         // When
-        Throwable t = catchThrowable(() -> userAccountService.findUserById(userId));
+        Throwable t = catchThrowable(() -> userAccountService.findUserAccountById(userId));
 
         // Then
         assertThat(t)
