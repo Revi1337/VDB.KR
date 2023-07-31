@@ -20,7 +20,7 @@ public class AuthController {
         authenticationService.register(joinRequest.toDto(), httpServletRequest);
     }
 
-    @GetMapping("/register/confirm")                        // TODO 이메일 인증코드가 만료되었는지 등등 추가적인 작업이 필요하다.~
+    @GetMapping("/register/email/confirm")
     public String confirmToken(@RequestParam String token) {
         authenticationService.confirmToken(token);
         return "ok";

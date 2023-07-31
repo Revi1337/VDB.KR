@@ -6,6 +6,8 @@ import com.revi1337.domain.RefreshToken;
 import com.revi1337.domain.enumerate.Role;
 import com.revi1337.dto.UserAccountDto;
 import com.revi1337.exception.DuplicateEmailException;
+import com.revi1337.exception.TokenExpiredException;
+import com.revi1337.repository.EmailTokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,12 +65,11 @@ public class AuthenticationService {
 
     public void confirmToken(String token) {
         EmailToken emailToken = emailTokenService.getEmailToken(token);
-        emailToken.confirmEmailToken(emailToken.getToken(), LocalDateTime.now());
-//        emailTokenService.confirmToken(emailToken.getToken(), LocalDateTime.now());   // TODO Bulk 연산으로 쿼리를 바로 보내던가 아니면, 비지니스 로직으로 할지 고민좀 해봐야한다.
+        if (emailToken.isTokenExpired()) throw new TokenExpiredException();
+        emailToken.confirmEmailToken(emailToken.getToken(), LocalDateTime.now());       // TODO Bulk 연산으로 쿼리를 바로 보내던가 아니면, 비지니스 로직으로 할지 고민좀 해봐야한다.
 
-        UserAccount userAccount = emailToken.getUserAccount();
+        UserAccount userAccount = emailToken.getUserAccount();                          // TODO Bulk 연산으로 쿼리를 바로 보내던가 아니면, 비지니스 로직으로 할지 고민좀 해봐야한다.
         userAccount.activateUserAccount(true, Role.USER);
-//        userAccountService.enableUserAccount(userAccount.getEmail());                 // TODO Bulk 연산으로 쿼리를 바로 보내던가 아니면, 비지니스 로직으로 할지 고민좀 해봐야한다.
     }
 
 //    @PersistenceContext private EntityManager entityManager;

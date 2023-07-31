@@ -53,4 +53,12 @@ public class EmailToken extends TimeBasedEntity {
         this.confirmedAt = confirmedAt;
     }
 
+    public boolean isTokenExpired() {
+        return !expiredAt.isAfter(LocalDateTime.now());
+    }
+
+    public boolean isTokenValid() {
+        return !isTokenExpired();
+    }
+
 }
