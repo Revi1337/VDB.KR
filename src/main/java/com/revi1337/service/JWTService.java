@@ -96,7 +96,7 @@ public class JWTService {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token, TokenType tokenType) {
+    public Claims extractAllClaims(String token, TokenType tokenType) {
         String secretKey = accessTokenSecretKey;
         if (tokenType.equals(TokenType.REFRESH)) secretKey = refreshTokenSecretKey;
         return Jwts.parserBuilder()

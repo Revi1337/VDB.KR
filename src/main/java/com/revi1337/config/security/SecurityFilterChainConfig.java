@@ -105,6 +105,7 @@ public class SecurityFilterChainConfig {
     @Bean
     public JwtValidatorFilter jwtValidatorFilter() {
         JwtValidatorFilter jwtValidatorFilter = new JwtValidatorFilter(
+                objectMapper,
                 jwtService,
                 userAccountRepository,
                 refreshTokenRepository);
