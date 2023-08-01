@@ -125,6 +125,11 @@ const userLoginRequest = async () => {
     const { data } = await userLogin(signInData.value);
     console.log('success');
     emit('signIn');
+    console.log(route.name);
+    if (route.name === 'SignUp') {
+      router.push({ name: 'Index' });
+      return;
+    }
     router.push({ name: route.name });
   } catch (error) {
     errorMessage.value = error.response.data.error.message;
@@ -143,6 +148,7 @@ const resetData = () => {
 
 const movePage = path => {
   emit('signIn');
+  console.log(route.name);
   router.push({ name: path });
 };
 </script>
