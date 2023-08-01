@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revi1337.domain.RefreshToken;
 import com.revi1337.domain.UserAccount;
 import com.revi1337.dto.request.LoginRequest;
-import com.revi1337.dto.response.AuthenticationResponse;
 import com.revi1337.dto.security.AuthenticatedUserAccount;
 import com.revi1337.repository.UserAccountRepository;
 import com.revi1337.service.JWTService;
@@ -13,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +28,8 @@ import java.util.Map;
 public class CustomAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String REFRESH_TOKEN_HEADER = "Refresh-Token";
+
+    private static final String BEARER = "Bearer ";
 
     private final ObjectMapper objectMapper;
 
@@ -69,14 +71,11 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
         String refreshToken = userAccountRepository.findRefreshTokenByUserAccountEmail(authenticatedUserAccount.email())
                 .map(UserAccount::getRefreshToken)
                 .map(RefreshToken::getToken)
-                .orElseThrow(() -> new UsernameNotFoundException("refresh token not found"));
-
-        AuthenticationResponse authenticationResponse = AuthenticationResponse.of(accessToken);
-        String responseJson = objectMapper.writeValueAsString(authenticationResponse);
+                .orElse(null);
 
         response.setHeader(REFRESH_TOKEN_HEADER, refreshToken);
+        response.setHeader(HttpHeaders.AUTHORIZATION, BEARER + accessToken);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().println(responseJson);
     }
 
     @Override
