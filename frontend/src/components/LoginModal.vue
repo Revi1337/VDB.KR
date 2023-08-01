@@ -28,9 +28,10 @@
             :spellcheck="false"
             type="password"
           />
-          <span class="q-ml-sm text-red">
+
+          <div class="q-ml-sm text-red block float-left" ref="shakeMessage">
             {{ errorMessage }}
-          </span>
+          </div>
 
           <div class="text-right q-mb-md">
             <Button outline type="submit" label="Sign In" />
@@ -99,6 +100,7 @@ const props = defineProps({
   }
 });
 
+const shakeMessage = ref(null);
 const errorMessage = ref('');
 const signInData = ref({
   email: '',
@@ -112,6 +114,10 @@ const userLoginRequest = async () => {
     router.push({ name: route.name });
   } catch (error) {
     errorMessage.value = error.response.data.error.message;
+    shakeMessage.value.classList.add('vibration');
+    setTimeout(() => {
+      shakeMessage.value.classList.remove('vibration');
+    }, 400);
   }
 };
 
@@ -129,5 +135,18 @@ const resetData = () => {
 }
 .login-component {
   width: 350px;
+}
+
+.vibration {
+  animation: vibration 0.02s infinite;
+}
+
+@keyframes vibration {
+  from {
+    transform: translateX(-0.4%);
+  }
+  to {
+    transform: translateX(0.4%);
+  }
 }
 </style>
