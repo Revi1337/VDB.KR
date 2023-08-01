@@ -22,7 +22,7 @@
       <template #header-left>
         <Button label="Log In" outline @click="layout = !layout" />
         <Button label="Sign Up" to="SignUp" />
-        <LoginModal v-model="layout" />
+        <LoginModal v-model="layout" @sign-in="layout = !layout" />
       </template>
     </PageHeader>
 

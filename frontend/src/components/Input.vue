@@ -4,7 +4,7 @@
     :autofocus="autofocus"
     :outlined="outlined"
     :label="label"
-    :spellcheck="false"
+    :spellcheck="spellcheck"
     :no-error-icon="noErrorIcon"
     :bottom-slots="bottomSlots"
     :error="error"
@@ -84,7 +84,7 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
-  }
+  },
 });
 </script>
 <!-- SUCCESS -->

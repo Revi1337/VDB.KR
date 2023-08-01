@@ -1,5 +1,9 @@
 <template>
-  <q-dialog @update:model-value="layout">
+  <q-dialog
+    @update:model-value="layout"
+    @hide="resetData"
+    @shake="document.getElementById('shaked-element')"
+  >
     <q-card
       flat
       class="login-container row items-center justify-center q-px-sm q-pt-md"
@@ -9,29 +13,33 @@
       </q-card-section>
 
       <q-form @submit.prevent="userLoginRequest">
-        <div class="login-component q-gutter-y-sm">
-          <q-input
+        <div class="login-component">
+          <Input
             autofocus
             v-model="signInData.email"
             outlined
             label="Email"
-            spellcheck="false"
+            :spellcheck="false"
           />
-          <q-input
+          <Input
             v-model="signInData.password"
             outlined
             label="Password"
-            spellcheck="false"
+            :spellcheck="false"
             type="password"
           />
-          <div class="text-right q-my-md">
+          <span class="q-ml-sm text-red">
+            {{ errorMessage }}
+          </span>
+
+          <div class="text-right q-mb-md">
             <Button outline type="submit" label="Sign In" />
           </div>
 
           <q-separator inset />
 
           <div class="q-mt-sm q-gutter-y-md q-pb-xl">
-            <q-btn
+            <Button
               class="login-component"
               color="secondary"
               :ripple="false"
@@ -47,9 +55,9 @@
                 />
                 <span class="text-secondary">sign in google</span>
               </div>
-            </q-btn>
+            </Button>
 
-            <q-btn
+            <Button
               class="login-component"
               color="secondary"
               :ripple="false"
@@ -65,7 +73,7 @@
                 />
                 <span class="text-secondary">sign in github</span>
               </div>
-            </q-btn>
+            </Button>
           </div>
         </div>
       </q-form>
@@ -78,13 +86,20 @@ import Button from 'src/components/Button.vue';
 import HeaderLogo from './HeaderLogo.vue';
 import { ref } from 'vue';
 import { userLogin } from 'src/api/auth';
+import { useRoute, useRouter } from 'vue-router';
+import Input from './Input.vue';
 
+const router = useRouter();
+const route = useRoute();
+
+const emit = defineEmits(['signIn']);
 const props = defineProps({
   layout: {
     type: Boolean
   }
 });
 
+const errorMessage = ref('');
 const signInData = ref({
   email: '',
   password: ''
@@ -92,10 +107,18 @@ const signInData = ref({
 const userLoginRequest = async () => {
   try {
     const { data } = await userLogin(signInData.value);
-    console.log(data);
+    console.log('success');
+    emit('signIn');
+    router.push({ name: route.name });
   } catch (error) {
-    console.log(error);
+    errorMessage.value = error.response.data.error.message;
   }
+};
+
+const resetData = () => {
+  errorMessage.value = '';
+  signInData.value.email = '';
+  signInData.value.password = '';
 };
 </script>
 
