@@ -1,9 +1,5 @@
 <template>
-  <q-dialog
-    @update:model-value="layout"
-    @hide="resetData"
-    @shake="document.getElementById('shaked-element')"
-  >
+  <q-dialog @update:model-value="layout" @hide="resetData">
     <q-card
       flat
       class="login-container row items-center justify-center q-px-sm q-pt-md"
@@ -14,26 +10,44 @@
 
       <q-form @submit.prevent="userLoginRequest">
         <div class="login-component">
-          <Input
-            autofocus
-            v-model="signInData.email"
-            outlined
-            label="Email"
-            :spellcheck="false"
-          />
-          <Input
-            v-model="signInData.password"
-            outlined
-            label="Password"
-            :spellcheck="false"
-            type="password"
-          />
+          <div>
+            <Input
+              autofocus
+              v-model="signInData.email"
+              outlined
+              label="Email"
+              :spellcheck="false"
+            />
+            <Input
+              v-model="signInData.password"
+              outlined
+              label="Password"
+              :spellcheck="false"
+              type="password"
+            />
 
-          <div class="q-ml-sm text-red block float-left" ref="shakeMessage">
-            {{ errorMessage }}
+            <div style="height: 20px">
+              <div class="q-ml-md text-red block float-left" ref="shakeMessage">
+                {{ errorMessage }}
+              </div>
+            </div>
           </div>
 
-          <div class="text-right q-mb-md">
+          <div class="q-mb-md q-mt-md row justify-between items-center">
+            <div class="q-gutter-y-sm block">
+              <div
+                class="login-options text-darkpurple"
+                @click="movePage('Forgot')"
+              >
+                Forgot your password?
+              </div>
+              <div
+                class="login-options text-darkpurple"
+                @click="movePage('SignUp')"
+              >
+                Don't have an account?
+              </div>
+            </div>
             <Button outline type="submit" label="Sign In" />
           </div>
 
@@ -42,7 +56,7 @@
           <div class="q-mt-sm q-gutter-y-md q-pb-xl">
             <Button
               class="login-component"
-              color="secondary"
+              color="primary"
               :ripple="false"
               outline
               href="/api/oauth2/google"
@@ -50,17 +64,17 @@
               <div class="row items-center" style="width: 200px">
                 <q-icon
                   class="col-4"
-                  color="secondary"
+                  color="primary"
                   size="16px"
                   name="fa-brands fa-google"
                 />
-                <span class="text-secondary">sign in google</span>
+                <span class="text-primary">sign in google</span>
               </div>
             </Button>
 
             <Button
               class="login-component"
-              color="secondary"
+              color="primary"
               :ripple="false"
               outline
               href="/api/oauth2/github"
@@ -68,11 +82,11 @@
               <div class="row items-center" style="width: 200px">
                 <q-icon
                   class="col-4"
-                  color="secondary"
+                  color="primary"
                   size="16px"
                   name="fa-brands fa-github"
                 />
-                <span class="text-secondary">sign in github</span>
+                <span class="text-primary">sign in github</span>
               </div>
             </Button>
           </div>
@@ -126,9 +140,18 @@ const resetData = () => {
   signInData.value.email = '';
   signInData.value.password = '';
 };
+
+const movePage = path => {
+  emit('signIn');
+  router.push({ name: path });
+};
 </script>
 
 <style lang="scss" scoped>
+.text-darkpurple {
+  // #CD31FF
+  color: #926dff !important;
+}
 .login-container {
   width: 500px;
   border-radius: 8px;
@@ -140,13 +163,33 @@ const resetData = () => {
 .vibration {
   animation: vibration 0.02s infinite;
 }
-
 @keyframes vibration {
   from {
-    transform: translateX(-0.4%);
+    transform: translateX(-0.6%);
   }
   to {
-    transform: translateX(0.4%);
+    transform: translateX(0.6%);
+  }
+}
+
+.login-options {
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: $darkpurple;
+    transition: width 0.3s ease-in-out;
+  }
+
+  &:hover:before {
+    width: 100%;
   }
 }
 </style>
