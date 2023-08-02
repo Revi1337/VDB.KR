@@ -99,13 +99,17 @@
 <script setup>
 import Button from 'src/components/Button.vue';
 import HeaderLogo from './HeaderLogo.vue';
+import Input from './Input.vue';
 import { ref } from 'vue';
 import { userLogin } from 'src/api/auth';
 import { useRoute, useRouter } from 'vue-router';
-import Input from './Input.vue';
+import { useAuthStore } from 'src/stores/token-store';
+import { storeToRefs } from 'pinia';
+import { reIssueToken } from 'src/api/token';
 
 const router = useRouter();
 const route = useRoute();
+const { accessToken } = storeToRefs(useAuthStore());
 
 const emit = defineEmits(['signIn']);
 const props = defineProps({
@@ -122,10 +126,10 @@ const signInData = ref({
 });
 const userLoginRequest = async () => {
   try {
-    const { data } = await userLogin(signInData.value);
-    console.log('success');
+    const { headers } = await userLogin(signInData.value);
+    accessToken.value = headers['authorization'].split('Bearer ')[1];
+    setInterval(silentReIssueToken, 10000);
     emit('signIn');
-    console.log(route.name);
     if (route.name === 'SignUp') {
       router.push({ name: 'Index' });
       return;
@@ -138,6 +142,18 @@ const userLoginRequest = async () => {
       shakeMessage.value.classList.remove('vibration');
     }, 400);
   }
+};
+
+const silentReIssueToken = () => {
+  reIssueToken()
+    .then(onLoginSuccess)
+    .catch(error => console.log(error));
+};
+
+const onLoginSuccess = response => {
+  accessToken.value = response.headers['authorization'].split('Bearer ')[1];
+  console.log(accessToken.value);
+  silentReIssueToken, 5000;
 };
 
 const resetData = () => {
