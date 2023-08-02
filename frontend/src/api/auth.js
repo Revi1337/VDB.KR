@@ -5,7 +5,9 @@ export async function userJoin(object) {
 }
 
 export async function userLogin(object) {
-  return axios.post('/api/v1/auth/login', object);
+  return axios.post('/api/v1/auth/login', object, {
+    withCredentials: true
+  });
 }
 
 export async function checkDuplicateUsername(object) {
