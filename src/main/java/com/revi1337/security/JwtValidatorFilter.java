@@ -79,7 +79,7 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
                 return;
             }
             String refreshToken = Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equals(REFRESH_TOKEN_HEADER))
+                    .filter(cookie -> cookie.getName().equals("refreshToken"))
                     .findFirst()
                     .map(Cookie::getValue)
                     .orElse(null);
@@ -101,7 +101,7 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
                         String reIssuedRefreshToken = jwtService.generateRefreshToken(subjectEmail);
                         RefreshToken newRefreshToken = RefreshToken.create().token(reIssuedRefreshToken).build();
                         refreshTokenRepository.updateToken(newRefreshToken.getToken());
-                        ResponseCookie responseCookie = ResponseCookie.from(REFRESH_TOKEN_HEADER, newRefreshToken.getToken())
+                        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
                                 .path("/")
                                 .httpOnly(true)
                                 .sameSite("None")

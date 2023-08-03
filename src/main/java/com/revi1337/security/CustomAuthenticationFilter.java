@@ -78,7 +78,7 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
                 .orElse(null);
 
 //        response.setHeader(REFRESH_TOKEN_HEADER, refreshToken);
-        ResponseCookie responseCookie = ResponseCookie.from(REFRESH_TOKEN_HEADER, refreshToken)
+        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .path("/")
                 .httpOnly(true)
                 .sameSite("None")
