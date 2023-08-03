@@ -100,7 +100,7 @@
 import Button from 'src/components/Button.vue';
 import HeaderLogo from './HeaderLogo.vue';
 import Input from './Input.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { userLogin } from 'src/api/auth';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from 'src/stores/token-store';
@@ -109,6 +109,8 @@ import { reIssueToken } from 'src/api/token';
 
 const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
+const { updateIsAuthenticated } = authStore;
 const { accessToken } = storeToRefs(useAuthStore());
 
 const emit = defineEmits(['signIn']);
@@ -116,6 +118,11 @@ const props = defineProps({
   layout: {
     type: Boolean
   }
+});
+
+onMounted(() => {
+  console.log('Login Modal mounted()');
+  if (authStore.getIsAuthenticated) setInterval(silentReIssueToken, 10000);
 });
 
 const shakeMessage = ref(null);
@@ -128,7 +135,8 @@ const userLoginRequest = async () => {
   try {
     const { headers } = await userLogin(signInData.value);
     accessToken.value = headers['authorization'].split('Bearer ')[1];
-    setInterval(silentReIssueToken, 10000);
+    updateIsAuthenticated();
+    if (!authStore.getIsAuthenticated) setInterval(silentReIssueToken, 10000);
     emit('signIn');
     if (route.name === 'SignUp') {
       router.push({ name: 'Index' });
@@ -153,7 +161,6 @@ const silentReIssueToken = () => {
 const onLoginSuccess = response => {
   accessToken.value = response.headers['authorization'].split('Bearer ')[1];
   console.log(accessToken.value);
-  silentReIssueToken, 5000;
 };
 
 const resetData = () => {
