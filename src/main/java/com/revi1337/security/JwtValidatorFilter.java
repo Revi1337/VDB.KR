@@ -12,19 +12,25 @@ import com.revi1337.repository.UserAccountRepository;
 import com.revi1337.service.JWTService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.springframework.http.HttpHeaders.*;
@@ -67,7 +73,17 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
 
         // reissue token logic
         if (request.getRequestURI().equals(reIssuedTokenPath)) {
-            final String refreshToken = request.getHeader(REFRESH_TOKEN_HEADER);
+            Cookie[] extractedCookies = request.getCookies();
+            if (extractedCookies == null) {
+                sendError(response, HttpStatus.BAD_REQUEST, "refresh token cookie needed");
+                return;
+            }
+            String refreshToken = Arrays.stream(request.getCookies())
+                    .filter(cookie -> cookie.getName().equals("refreshToken"))
+                    .findFirst()
+                    .map(Cookie::getValue)
+                    .orElse(null);
+
             if (refreshToken == null) {
                 sendError(response, HttpStatus.BAD_REQUEST, "refresh token needed");
                 return;
@@ -85,10 +101,16 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
                         String reIssuedRefreshToken = jwtService.generateRefreshToken(subjectEmail);
                         RefreshToken newRefreshToken = RefreshToken.create().token(reIssuedRefreshToken).build();
                         refreshTokenRepository.updateToken(newRefreshToken.getToken());
+                        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
+                                .path("/")
+                                .httpOnly(true)
+                                .sameSite("None")
+                                .secure(true)
+                                .build();
 
                         String reIssuedAccessToken = jwtService.generateAccessToken(subjectEmail);
 
-                        response.setHeader(REFRESH_TOKEN_HEADER, reIssuedRefreshToken);
+                        response.setHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
                         response.setHeader(AUTHORIZATION, BEARER + reIssuedAccessToken);
                     });
             return;
@@ -131,6 +153,10 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
         httpServletResponse.getWriter().println(jsonString);
         httpServletResponse.setStatus(status.value());
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    }
+
+    public Optional<Cookie[]> extractCookies(HttpServletRequest httpServletRequest) {
+        return Optional.of(httpServletRequest.getCookies());
     }
 
 }

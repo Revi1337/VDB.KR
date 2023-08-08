@@ -29,6 +29,11 @@ const routes = [
         component: () => import('pages/SignUpPage.vue')
       },
       {
+        path: '/forgot',
+        name: 'Forgot',
+        component: () => import('pages/ForgotPage.vue')
+      },
+      {
         path: '/practice',
         name: 'Practice',
         component: () => import('pages/PracticePage.vue')

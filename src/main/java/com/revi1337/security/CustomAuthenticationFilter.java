@@ -9,11 +9,14 @@ import com.revi1337.repository.UserAccountRepository;
 import com.revi1337.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -21,6 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Map;
 
 
@@ -73,7 +77,14 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
                 .map(RefreshToken::getToken)
                 .orElse(null);
 
-        response.setHeader(REFRESH_TOKEN_HEADER, refreshToken);
+//        response.setHeader(REFRESH_TOKEN_HEADER, refreshToken);
+        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .path("/")
+                .httpOnly(true)
+                .sameSite("None")
+                .secure(true)
+                .build();
+        response.setHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
         response.setHeader(HttpHeaders.AUTHORIZATION, BEARER + accessToken);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     }
